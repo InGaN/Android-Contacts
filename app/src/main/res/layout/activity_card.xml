@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.kevin.contactcard.CardActivity">
+
+    <RelativeLayout
+        android:id="@+id/lay_topLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/red">
+        <ImageView
+            android:id="@+id/img_portrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/lbl_name"
+            android:text="name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_portrait"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lay_topRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/lay_topLeft"
+        android:background="@color/green">
+        <TextView
+            android:id="@+id/lbl_nationality"
+            android:text="nationaity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lay_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lay_topLeft"
+        android:background="@color/blue">
+        <TextView
+            android:id="@+id/lbl_street"
+            android:text="street"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="150px"
+            android:layout_height="50px"
+            android:layout_below="@id/lbl_street"
+            android:onClick="randomPerson"/>
+    </RelativeLayout>
+
+</RelativeLayout>
