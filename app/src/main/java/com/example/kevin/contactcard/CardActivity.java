@@ -1,5 +1,7 @@
 package com.example.kevin.contactcard;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -22,9 +24,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class CardActivity extends AppCompatActivity {
+    Person currentPerson;
     TextView name;
     TextView nationality;
     TextView street;
+    FeedreaderDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,8 @@ public class CardActivity extends AppCompatActivity {
         name = (TextView) findViewById(R.id.lbl_name);
         nationality = (TextView) findViewById(R.id.lbl_nationality);
         street = (TextView) findViewById(R.id.lbl_street);
+
+        dbHelper = new FeedreaderDbHelper(CardActivity.this);
     }
 
     @Override
@@ -60,6 +66,24 @@ public class CardActivity extends AppCompatActivity {
 
     public void randomPerson(View view) {
         new JSONAsyncTask().execute("");
+    }
+
+    public void savePerson(View view) {
+        // Gets the data repository in write mode
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, 0);
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_TITLE, currentPerson.getTitle());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_FIRST, currentPerson.getFirst());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_LAST, currentPerson.getLast());
+        // continue here
+
+        //long newRowId;
+        //newRowId = db.insert(
+                //FeedreaderContract.FeedEntry.TABLE_NAME,
+                //FeedreaderContract.FeedEntry.COLUMN_NAME_NULLABLE,
+                //values);
     }
 
     private class JSONAsyncTask extends AsyncTask<String, String, String> {
@@ -113,6 +137,7 @@ public class CardActivity extends AppCompatActivity {
                         json.getJSONObject("picture").getString("medium"),
                         jObject.getString("nationality")
                 );
+                currentPerson = person;
                 name.setText(person.getTitle() + " " + person.getFirst() + " " + person.getLast());
                 nationality.setText(person.getNationality());
                 street.setText(person.getStreet());
@@ -133,7 +158,6 @@ public class CardActivity extends AppCompatActivity {
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
         ImageView portrait;
 
         public DownloadImageTask(ImageView bmImage) {

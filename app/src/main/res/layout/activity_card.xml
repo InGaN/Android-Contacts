@@ -48,9 +48,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:layout_width="150px"
-            android:layout_height="50px"
+            android:id="@+id/btn_savePerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/lbl_street"
+            android:text="@string/save"
+            android:onClick="savePerson"/>
+        <Button
+            android:id="@+id/btn_randomPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_savePerson"
+            android:text="@string/random"
             android:onClick="randomPerson"/>
     </RelativeLayout>
 
