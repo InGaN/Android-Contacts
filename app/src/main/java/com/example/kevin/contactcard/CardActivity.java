@@ -73,17 +73,26 @@ public class CardActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, 0);
+        //values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, null);
         values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_TITLE, currentPerson.getTitle());
         values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_FIRST, currentPerson.getFirst());
         values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_LAST, currentPerson.getLast());
-        // continue here
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_GENDER, currentPerson.getGender());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_STREET, currentPerson.getStreet());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_CITY, currentPerson.getCity());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_STATE, currentPerson.getState());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_ZIP, currentPerson.getZip());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_EMAIL, currentPerson.getEmail());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_PHONE, currentPerson.getPhone());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_IMAGESTRING, currentPerson.getImageString());
+        values.put(FeedreaderContract.FeedEntry.COLUMN_NAME_NATIONALITY, currentPerson.getNationality());
 
-        //long newRowId;
-        //newRowId = db.insert(
-                //FeedreaderContract.FeedEntry.TABLE_NAME,
-                //FeedreaderContract.FeedEntry.COLUMN_NAME_NULLABLE,
-                //values);
+        long newRowId;
+        newRowId = db.insert(
+                FeedreaderContract.FeedEntry.TABLE_NAME,
+                FeedreaderContract.FeedEntry.COLUMN_NAME_FIRST,
+                values);
+        MainActivity.showAlert(CardActivity.this, "Database insert", "return: " + newRowId);
     }
 
     private class JSONAsyncTask extends AsyncTask<String, String, String> {
@@ -143,7 +152,6 @@ public class CardActivity extends AppCompatActivity {
                 street.setText(person.getStreet());
 
                 new DownloadImageTask((ImageView) findViewById(R.id.img_portrait)).execute(person.getImageString());
-
 
                 //Iterator<String> iterator = jObject.keys();
                 //while(iterator.hasNext()) {

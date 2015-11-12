@@ -46,7 +46,7 @@ public final class FeedreaderContract {
                 FeedEntry.COLUMN_NAME_EMAIL + TYPE_VARCHAR + ", " +
                 FeedEntry.COLUMN_NAME_PHONE + TYPE_VARCHAR + ", " +
                 FeedEntry.COLUMN_NAME_IMAGESTRING + TYPE_VARCHAR + ", "+
-                FeedEntry.COLUMN_NAME_NATIONALITY + TYPE_VARCHAR + ", "+
+                FeedEntry.COLUMN_NAME_NATIONALITY + TYPE_VARCHAR +
                 " )";
         public static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
