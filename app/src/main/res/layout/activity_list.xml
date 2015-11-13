@@ -11,5 +11,20 @@
         android:text="@string/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/lbl_test2"
+        android:text="@string/hello_world"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lbl_teste"/>
 
+    <ListView
+        android:id="@+id/listviewMain"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="10px"
+        android:layout_below="@id/lbl_test2"
+        android:divider="@color/text"
+        android:dividerHeight="1dp"
+        />
 </RelativeLayout>

@@ -22,12 +22,12 @@ public class Person {
         this.id = id;
     }
 
-    public Person(int id, String gender, String title, String first, String last, String street, String city, String state, String zip, String email, String phone, String imageString, String nationality) {
+    public Person(int id, String title, String first, String last, String gender, String street, String city, String state, String zip, String email, String phone, String imageString, String nationality) {
         this.id = id;
-        this.gender = gender;
         this.title = title;
         this.first = first;
         this.last = last;
+        this.gender = gender;
         this.street = street;
         this.city = city;
         this.state = state;

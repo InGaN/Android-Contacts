@@ -90,7 +90,7 @@ public class CardActivity extends AppCompatActivity {
         long newRowId;
         newRowId = db.insert(
                 FeedreaderContract.FeedEntry.TABLE_NAME,
-                FeedreaderContract.FeedEntry.COLUMN_NAME_FIRST,
+                FeedreaderContract.FeedEntry.COLUMN_NAME_FIRST, //nullColumnHack
                 values);
         MainActivity.showAlert(CardActivity.this, "Database insert", "return: " + newRowId);
     }
