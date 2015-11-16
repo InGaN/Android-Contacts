@@ -16,7 +16,6 @@
         <activity
             android:name=".CardActivity"
             android:label="@string/title_activity_card" >
-
         </activity>
         <activity
             android:name=".ListActivity"

@@ -1,6 +1,7 @@
 package com.example.kevin.contactcard;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,9 +36,16 @@ public class CardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
 
+        Intent intent = getIntent();
+        currentPerson = (Person) intent.getParcelableExtra("incoming_person");
+
         name = (TextView) findViewById(R.id.lbl_name);
         nationality = (TextView) findViewById(R.id.lbl_nationality);
         street = (TextView) findViewById(R.id.lbl_street);
+
+        if(currentPerson != null) {
+            drawPerson(currentPerson);
+        }
 
         dbHelper = new FeedreaderDbHelper(CardActivity.this);
     }
@@ -146,12 +154,8 @@ public class CardActivity extends AppCompatActivity {
                         json.getJSONObject("picture").getString("medium"),
                         jObject.getString("nationality")
                 );
-                currentPerson = person;
-                name.setText(person.getTitle() + " " + person.getFirst() + " " + person.getLast());
-                nationality.setText(person.getNationality());
-                street.setText(person.getStreet());
 
-                new DownloadImageTask((ImageView) findViewById(R.id.img_portrait)).execute(person.getImageString());
+                drawPerson(person);
 
                 //Iterator<String> iterator = jObject.keys();
                 //while(iterator.hasNext()) {
@@ -165,7 +169,16 @@ public class CardActivity extends AppCompatActivity {
         }
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private void drawPerson(Person person) {
+        currentPerson = person;
+        name.setText(person.getTitle() + " " + person.getFirst() + " " + person.getLast());
+        nationality.setText(person.getNationality());
+        street.setText(person.getStreet());
+
+        new DownloadImageTask((ImageView) findViewById(R.id.img_portrait)).execute(person.getImageString());
+    }
+
+    public static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView portrait;
 
         public DownloadImageTask(ImageView bmImage) {
@@ -179,7 +192,7 @@ public class CardActivity extends AppCompatActivity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                MainActivity.showAlert(CardActivity.this, "ERROR", "Unable to get image: " + e.getMessage());
+                //MainActivity.showAlert(CardActivity.this, "ERROR", "Unable to get image: " + e.getMessage());
                 e.printStackTrace();
             }
             return mIcon11;

@@ -1,5 +1,6 @@
 package com.example.kevin.contactcard;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -116,7 +117,7 @@ public class ListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void fillListWithPeople(ArrayList<Person> people) {
+    private void fillListWithPeople(final ArrayList<Person> people) {
         CustomListAdapter customListAdapter = new CustomListAdapter(this, people);
 
         ListView idList = (ListView)findViewById(R.id.listviewMain);
@@ -125,8 +126,14 @@ public class ListActivity extends AppCompatActivity {
         idList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //callEditor(Lights.get(position));
+                callCardActivity(people.get(position));
             }
         });
+    }
+
+    private void callCardActivity(Person person) {
+        Intent intent = new Intent(this, CardActivity.class);
+        intent.putExtra("incoming_person", person);
+        startActivity(intent);
     }
 }
