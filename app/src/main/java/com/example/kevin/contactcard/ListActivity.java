@@ -17,14 +17,45 @@ import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
     FeedreaderDbHelper dbHelper;
+    ListView idList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        fillListWithPeople(queryDatabase());
+    }
 
-        TextView listText = (TextView) findViewById(R.id.lbl_teste);
-        TextView listText2 = (TextView) findViewById(R.id.lbl_test2);
+    @Override
+    public void onResume() {
+        super.onResume();
+        setContentView(R.layout.activity_list);
+        fillListWithPeople(queryDatabase());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private ArrayList<Person> queryDatabase() {
         dbHelper = new FeedreaderDbHelper(ListActivity.this);
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -72,55 +103,33 @@ public class ListActivity extends AppCompatActivity {
             ArrayList<Person> people = new ArrayList<>();
             cursor.moveToFirst();
 
-            for(int x = 0; x < cursor.getCount(); x++) {
+            for (int x = 0; x < cursor.getCount(); x++) {
                 people.add(new Person(
-                        Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getString(6),
-                        cursor.getString(7),
-                        cursor.getString(8),
-                        cursor.getString(9),
-                        cursor.getString(10),
-                        cursor.getString(11),
-                        cursor.getString(12))
+                                Integer.parseInt(cursor.getString(0)),
+                                cursor.getString(1),
+                                cursor.getString(2),
+                                cursor.getString(3),
+                                cursor.getString(4),
+                                cursor.getString(5),
+                                cursor.getString(6),
+                                cursor.getString(7),
+                                cursor.getString(8),
+                                cursor.getString(9),
+                                cursor.getString(10),
+                                cursor.getString(11),
+                                cursor.getString(12))
                 );
                 cursor.moveToNext();
             }
-            fillListWithPeople(people);
+            return people;
         }
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return null;
     }
 
     private void fillListWithPeople(final ArrayList<Person> people) {
         CustomListAdapter customListAdapter = new CustomListAdapter(this, people);
 
-        ListView idList = (ListView)findViewById(R.id.listviewMain);
+        idList = (ListView)findViewById(R.id.listviewMain);
         idList.setAdapter(customListAdapter);
 
         idList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

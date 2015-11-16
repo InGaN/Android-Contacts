@@ -26,9 +26,6 @@ import java.net.URL;
 
 public class CardActivity extends AppCompatActivity {
     Person currentPerson;
-    TextView name;
-    TextView nationality;
-    TextView street;
     FeedreaderDbHelper dbHelper;
 
     @Override
@@ -38,10 +35,6 @@ public class CardActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         currentPerson = (Person) intent.getParcelableExtra("incoming_person");
-
-        name = (TextView) findViewById(R.id.lbl_name);
-        nationality = (TextView) findViewById(R.id.lbl_nationality);
-        street = (TextView) findViewById(R.id.lbl_street);
 
         if(currentPerson != null) {
             drawPerson(currentPerson);
@@ -141,10 +134,10 @@ public class CardActivity extends AppCompatActivity {
 
                 Person person = new Person(
                         0,//Integer.parseInt(key),
-                        json.getString("gender"),
                         json.getJSONObject("name").getString("title"),
                         json.getJSONObject("name").getString("first"),
                         json.getJSONObject("name").getString("last"),
+                        json.getString("gender"),
                         json.getJSONObject("location").getString("street"),
                         json.getJSONObject("location").getString("city"),
                         json.getJSONObject("location").getString("state"),
@@ -171,9 +164,20 @@ public class CardActivity extends AppCompatActivity {
 
     private void drawPerson(Person person) {
         currentPerson = person;
+
+        TextView name = (TextView) findViewById(R.id.lbl_name);
+        TextView nationality = (TextView) findViewById(R.id.lbl_nationality);
+        TextView street = (TextView) findViewById(R.id.lbl_street);
+        TextView cityState = (TextView) findViewById(R.id.lbl_city_state);
+        TextView email = (TextView) findViewById(R.id.lbl_email);
+        TextView phone = (TextView) findViewById(R.id.lbl_phone);
+
         name.setText(person.getTitle() + " " + person.getFirst() + " " + person.getLast());
         nationality.setText(person.getNationality());
         street.setText(person.getStreet());
+        cityState.setText(person.getCity() + ", " + person.getState() + ", " + person.getNationality());
+        email.setText(person.getEmail());
+        phone.setText(person.getPhone());
 
         new DownloadImageTask((ImageView) findViewById(R.id.img_portrait)).execute(person.getImageString());
     }

@@ -8,10 +8,10 @@ import android.os.Parcelable;
  */
 public class Person implements Parcelable {
     private int id;
-    private String gender;
     private String title;
     private String first;
     private String last;
+    private String gender;
     private String street;
     private String city;
     private String state;
