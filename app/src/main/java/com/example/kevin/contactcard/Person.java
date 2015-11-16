@@ -94,6 +94,8 @@ public class Person implements Parcelable {
         return getTitle() + " " + getFirst() + " " + getLast() + " (" + getGender() + "), " + getStreet() + " " + getState() + ", " + getZip() + ", " + getNationality() + " " +getEmail() + " " + getPhone() + ", " + getImageString();
     }
 
+    public int getId() { return id; }
+
     public String getGender() {
         return gender;
     }

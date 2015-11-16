@@ -17,13 +17,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/lbl_teste"/>
+    <TextView
+        android:id="@+id/lbl_sub2"
+        android:text="@string/subtitle2"
+        android:textSize="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lbl_test2"/>
 
     <ListView
         android:id="@+id/listviewMain"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:padding="10px"
-        android:layout_below="@id/lbl_test2"
+        android:layout_below="@id/lbl_sub2"
+        android:layout_marginTop="5px"
         android:divider="@color/text"
         android:dividerHeight="1dp"
         />

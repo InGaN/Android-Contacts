@@ -1,8 +1,10 @@
 package com.example.kevin.contactcard;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -82,7 +84,7 @@ public class ListActivity extends AppCompatActivity {
                 FeedreaderContract.FeedEntry.TABLE_NAME,                    // The table to query
                 select,                                                     // The columns to return
                 FeedreaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + "=?",   // The columns for the WHERE clause
-                new String[] {"1"},                                         // The values for the WHERE clause
+                new String[]{"1"},                                         // The values for the WHERE clause
                 null,                                                       // don't group the rows
                 null,                                                       // don't filter by row groups
                 sortOrder                                                   // The sort order
@@ -126,6 +128,17 @@ public class ListActivity extends AppCompatActivity {
         return null;
     }
 
+    private void deleteFromDatabase(int key) {
+        dbHelper = new FeedreaderDbHelper(ListActivity.this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete(
+            FeedreaderContract.FeedEntry.TABLE_NAME,
+            FeedreaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + "=" + key,
+            null
+        );
+    }
+
     private void fillListWithPeople(final ArrayList<Person> people) {
         CustomListAdapter customListAdapter = new CustomListAdapter(this, people);
 
@@ -138,7 +151,33 @@ public class ListActivity extends AppCompatActivity {
                 callCardActivity(people.get(position));
             }
         });
+        idList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                deleteFromDatabase(people.get(position).getId());
+                                fillListWithPeople(queryDatabase());
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //Do nothing, close dialog
+                                break;
+                        }
+                    }
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(ListActivity.this);
+                builder.setMessage("Delete Contact?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+                return false;
+            }
+        });
     }
+
+
 
     private void callCardActivity(Person person) {
         Intent intent = new Intent(this, CardActivity.class);
