@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -38,7 +39,7 @@ public class CustomListAdapter extends ArrayAdapter<Person> {
         text1.setText(people.get(position).getTitle() + " " + people.get(position).getFirst() + " " + people.get(position).getLast());
         text2.setText(people.get(position).getPhone() + " - " +people.get(position).getNationality());
 
-        new CardActivity.DownloadImageTask((ImageView) rowView.findViewById(R.id.list_image)).execute(people.get(position).getImageString());
+        new CardActivity.DownloadImageTask((ImageView) rowView.findViewById(R.id.list_image), (RelativeLayout) rowView.findViewById(R.id.list_loadingPanel)).execute(people.get(position).getImageString());
 
         return rowView;
     }

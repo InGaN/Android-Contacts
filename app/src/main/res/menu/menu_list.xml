@@ -2,6 +2,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.kevin.contactcard.ListActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+
+    <item
+        android:id="@+id/action_randomicon"
+        android:icon="@drawable/random"
+        android:title="@string/action_random"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_random"
+        android:icon="@drawable/random"
+        android:title="@string/action_random"
+        app:showAsAction="withText"/>
+
+    <item
+        android:id="@+id/action_deleteallicon"
+        android:icon="@drawable/deleteall"
+        android:title="@string/action_deleteall"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_deleteall"
+        android:icon="@drawable/deleteall"
+        android:title="@string/action_deleteall"
+        app:showAsAction="withText"/>
 </menu>

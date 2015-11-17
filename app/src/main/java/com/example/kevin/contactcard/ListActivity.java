@@ -1,5 +1,6 @@
 package com.example.kevin.contactcard;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +27,11 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        myToolbar.setTitle(R.string.app_name);
+
         fillListWithPeople(queryDatabase());
     }
 
@@ -32,25 +39,31 @@ public class ListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         setContentView(R.layout.activity_list);
+        // dont forget to set your toolbar here too!
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        myToolbar.setTitle(R.string.app_name);
+
         fillListWithPeople(queryDatabase());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_random || id == R.id.action_randomicon) {
+            callCardActivity(null);
+            return true;
+        }
+        else if (id == R.id.action_deleteall || id == R.id.action_deleteallicon) {
+            clearDatabase();
             return true;
         }
 
@@ -158,7 +171,7 @@ public class ListActivity extends AppCompatActivity {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 deleteFromDatabase(people.get(position).getId());
                                 fillListWithPeople(queryDatabase());
@@ -177,11 +190,44 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void callCardActivity(Person person) {
         Intent intent = new Intent(this, CardActivity.class);
         intent.putExtra("incoming_person", person);
         startActivity(intent);
+    }
+
+    private void clearDatabase() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        dbHelper = new FeedreaderDbHelper(ListActivity.this);
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        db.execSQL("delete from "+ FeedreaderContract.FeedEntry.TABLE_NAME);
+                        fillListWithPeople(queryDatabase());
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //Do nothing, close dialog
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListActivity.this);
+        builder.setMessage("Are you sure you want to delete all your contacts? This cannot be undone.").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+    }
+
+    public static void showAlert(Context context, String title, String message) {
+        android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(context).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setButton(android.app.AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 }

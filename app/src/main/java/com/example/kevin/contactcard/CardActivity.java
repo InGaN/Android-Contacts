@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -39,6 +40,9 @@ public class CardActivity extends AppCompatActivity {
 
         if(currentPerson != null) {
             drawPerson(currentPerson);
+        }
+        else {
+            new JSONAsyncTask().execute("");
         }
 
         dbHelper = new FeedreaderDbHelper(CardActivity.this);
@@ -94,7 +98,7 @@ public class CardActivity extends AppCompatActivity {
                 FeedreaderContract.FeedEntry.TABLE_NAME,
                 FeedreaderContract.FeedEntry.COLUMN_NAME_FIRST, //nullColumnHack
                 values);
-        MainActivity.showAlert(CardActivity.this, CardActivity.this.getString(R.string.dbEntry), "(id: " + newRowId + ")");
+        ListActivity.showAlert(CardActivity.this, CardActivity.this.getString(R.string.dbEntry), "(id: " + newRowId + ")");
     }
 
     private class JSONAsyncTask extends AsyncTask<String, String, String> {
@@ -158,7 +162,7 @@ public class CardActivity extends AppCompatActivity {
             }
             catch (JSONException jsonEx) {
                 System.out.println(jsonEx.toString());
-                MainActivity.showAlert(CardActivity.this, "ERROR", "Unable to parse the JSON: " + jsonEx.getMessage());
+                ListActivity.showAlert(CardActivity.this, "ERROR", "Unable to parse the JSON: " + jsonEx.getMessage());
             }
         }
     }
@@ -188,31 +192,35 @@ public class CardActivity extends AppCompatActivity {
         final int resourceId = resources.getIdentifier(person.getNationality().toLowerCase(), "drawable", CardActivity.this.getPackageName());
         flag.setImageResource(resourceId);
 
-        new DownloadImageTask((ImageView) findViewById(R.id.img_portrait)).execute(person.getImageString());
+        new DownloadImageTask((ImageView) findViewById(R.id.img_portrait), (RelativeLayout) findViewById(R.id.loadingPanel)).execute(person.getImageString());
     }
 
     public static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView portrait;
+        RelativeLayout loader;
 
-        public DownloadImageTask(ImageView bmImage) {
+        public DownloadImageTask(ImageView bmImage, RelativeLayout loader) {
             this.portrait = bmImage;
+            this.loader = loader;
         }
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            Bitmap bm = null;
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
+                bm = BitmapFactory.decodeStream(in);
+
             } catch (Exception e) {
-                //MainActivity.showAlert(CardActivity.this, "ERROR", "Unable to get image: " + e.getMessage());
+                //ListActivity.showAlert(CardActivity.this, "ERROR", "Unable to get image: " + e.getMessage());
                 e.printStackTrace();
             }
-            return mIcon11;
+            return bm;
         }
 
         protected void onPostExecute(Bitmap result) {
             portrait.setImageBitmap(result);
+            loader.setVisibility(View.GONE);
         }
     }
 }
